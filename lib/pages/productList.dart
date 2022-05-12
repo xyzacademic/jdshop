@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
+import 'package:jdshop/services/searchServices.dart';
 import '../config/config.dart';
 import 'dart:convert';
 import 'package:jdshop/services/screenAdapter.dart';
@@ -65,8 +66,8 @@ class _ProductListPageState extends State<ProductListPage>
   void initState() {
     super.initState();
     _cid = widget.arguments?["cid"];
-    print(_cid == null);
-    print(_cid);
+    // print(_cid == null);
+    // print(_cid);
     _keywords = widget.arguments?["keywords"];
     _initKeywordsController.text = _keywords == null? "": _keywords;
     // assign value to search box
@@ -92,12 +93,12 @@ class _ProductListPageState extends State<ProductListPage>
     var api;
 
     if (_keywords == null){
-      print("go cid");
+      // print("go cid");
       api =
           '${Config.domain}/api/plist?cid=${_cid}&page=${_page}&sort=${_sort}&pageSize=${_pageSize}';
 
     } else {
-      print("go keywords");
+      // print("go keywords");
       api =
           // '${Config.domain}/api/plist?search=${widget.arguments?["keywords"]}&page=${_page}&sort=${_sort}&pageSize=${_pageSize}';
       '${Config.domain}/api/plist?search=${_keywords}&page=${_page}&sort=${_sort}&pageSize=${_pageSize}';
@@ -331,6 +332,7 @@ class _ProductListPageState extends State<ProductListPage>
                     borderRadius: BorderRadius.circular(30))),
             onChanged: (value){
               setState(() {
+
                 _keywords = value;
               });
             },
@@ -348,6 +350,7 @@ class _ProductListPageState extends State<ProductListPage>
                   ],
                 )),
             onTap: () {
+              SearchServices.setHistoryList(_keywords);
               _subHeaderChange(1);
             },
           )

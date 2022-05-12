@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import '../pages/tabs/tab.dart';
 import '../pages/search.dart';
 import '../pages/productList.dart';
-
+import '../pages/productContent.dart';
 
 final routes = {
   '/': (context, {arguments}) => Tabs(),
   '/search': (context, {arguments}) => SearchPage(),
   '/productList': (context, {arguments}) => ProductListPage(arguments: arguments),
-  // '/report': (context, {arguments}) => ReportPage(arguments: arguments),
+  '/productContent': (context, {arguments}) => ProductContentPage(arguments: arguments),
 
   // '/registerFirst': (context, {arguments}) => RegisterFirstPage(arguments:
   // arguments),

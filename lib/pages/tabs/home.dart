@@ -36,7 +36,7 @@ class _HomePageState extends State<HomePage>
     _getFocusData();
     _getHotProductData();
     _getBestProductData();
-    SearchServices.setSearchData("aaa");
+    // SearchServices.setHistoryList("");
   }
 
   _getFocusData() async {
@@ -175,57 +175,63 @@ class _HomePageState extends State<HomePage>
     var itemWidth = (ScreenAdapter.getScreenWidth() - 30) / 2;
     var sImg = value.sPic;
     sImg = Config.domain + '/' + sImg.replaceAll('\\', '/');
-      return Container(
-          padding: EdgeInsets.all(10),
-          width: itemWidth,
-          decoration: BoxDecoration(
-              border: Border.all(
-            color: Color.fromRGBO(233, 233, 233, 0.9),
-            width: 1,
-          )),
-          child: Column(
-            children: <Widget>[
-              Container(
-                  width: double.infinity,
-                  child: AspectRatio(
-                      aspectRatio: 1 / 1,
-                      child: Image.network(
-                          sImg,
-                          fit: BoxFit.cover))),
-              Padding(
-                padding: EdgeInsets.only(top: ScreenAdapter.height(20)),
-                child: Text(value.title,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      color: Colors.black54,
-                    )),
-              ),
-              Padding(
+      return InkWell(
+        child: Container(
+            padding: EdgeInsets.all(10),
+            width: itemWidth,
+            decoration: BoxDecoration(
+                border: Border.all(
+                  color: Color.fromRGBO(233, 233, 233, 0.9),
+                  width: 1,
+                )),
+            child: Column(
+              children: <Widget>[
+                Container(
+                    width: double.infinity,
+                    child: AspectRatio(
+                        aspectRatio: 1 / 1,
+                        child: Image.network(
+                            sImg,
+                            fit: BoxFit.cover))),
+                Padding(
                   padding: EdgeInsets.only(top: ScreenAdapter.height(20)),
-                  child: Stack(
-                    children: <Widget>[
-                      Align(
-                        child: Text("\$${value.price}",
-                            style: TextStyle(
-                              color: Colors.red,
-                              fontSize: 16,
-                            )),
-                        alignment: Alignment.centerLeft,
-                      ),
-                      Align(
-                        child: Text("\$${value.oldPrice}",
-                            style: TextStyle(
-                              color: Colors.black54,
-                              fontSize: 14,
-                              decoration: TextDecoration.lineThrough,
-                            )),
-                        alignment: Alignment.centerRight,
-                      ),
-                    ],
-                  )),
-            ],
-          )
+                  child: Text(value.title,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        color: Colors.black54,
+                      )),
+                ),
+                Padding(
+                    padding: EdgeInsets.only(top: ScreenAdapter.height(20)),
+                    child: Stack(
+                      children: <Widget>[
+                        Align(
+                          child: Text("\$${value.price}",
+                              style: TextStyle(
+                                color: Colors.red,
+                                fontSize: 16,
+                              )),
+                          alignment: Alignment.centerLeft,
+                        ),
+                        Align(
+                          child: Text("\$${value.oldPrice}",
+                              style: TextStyle(
+                                color: Colors.black54,
+                                fontSize: 14,
+                                decoration: TextDecoration.lineThrough,
+                              )),
+                          alignment: Alignment.centerRight,
+                        ),
+                      ],
+                    )),
+              ],
+            )
+        ),
+        onTap: (){
+          Navigator.pushNamed(context, '/productContent',
+          arguments: {"id": value.sId});
+        }
       );
 
 

@@ -12,7 +12,7 @@ class Storage{
     return sp.getString(key);
   }
 
-  static Future<void> remove(key, value) async{
+  static Future<void> remove(key) async{
     SharedPreferences sp = await SharedPreferences.getInstance();
     sp.remove(key);
   }
