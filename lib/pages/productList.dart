@@ -65,7 +65,7 @@ class _ProductListPageState extends State<ProductListPage>
   void initState() {
     super.initState();
     _cid = widget.arguments?["cid"];
-    _keywords = widget.arguments?["cid"];
+    _keywords = widget.arguments?["keywords"];
     _initKeywordsController.text = _keywords;
     // assign value to search box
     // widget.arguments?["keywords"] == null? _initKeywordsController.text = "":
@@ -111,7 +111,7 @@ class _ProductListPageState extends State<ProductListPage>
     } else{
       _hasData = true;
     }
-    
+
     var currentLength = productList.result?.length;
     if (currentLength! < _pageSize) {
       setState(() {
