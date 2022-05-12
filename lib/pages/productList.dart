@@ -65,8 +65,10 @@ class _ProductListPageState extends State<ProductListPage>
   void initState() {
     super.initState();
     _cid = widget.arguments?["cid"];
+    print(_cid == null);
+    print(_cid);
     _keywords = widget.arguments?["keywords"];
-    _initKeywordsController.text = _keywords;
+    _initKeywordsController.text = _keywords == null? "": _keywords;
     // assign value to search box
     // widget.arguments?["keywords"] == null? _initKeywordsController.text = "":
     // _initKeywordsController.text = widget.arguments?["keywords"];
@@ -90,14 +92,17 @@ class _ProductListPageState extends State<ProductListPage>
     var api;
 
     if (_keywords == null){
+      print("go cid");
       api =
           '${Config.domain}/api/plist?cid=${_cid}&page=${_page}&sort=${_sort}&pageSize=${_pageSize}';
 
     } else {
+      print("go keywords");
       api =
           // '${Config.domain}/api/plist?search=${widget.arguments?["keywords"]}&page=${_page}&sort=${_sort}&pageSize=${_pageSize}';
       '${Config.domain}/api/plist?search=${_keywords}&page=${_page}&sort=${_sort}&pageSize=${_pageSize}';
     }
+
         var result = await Dio().get(api);
     // print(api);
     var productList = result.data is Map

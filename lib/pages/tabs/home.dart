@@ -7,6 +7,7 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import '../../config/config.dart';
 import '../../widget/loadingWidget.dart';
+import '../../services/searchServices.dart';
 
 
 class HomePage extends StatefulWidget {
@@ -35,6 +36,7 @@ class _HomePageState extends State<HomePage>
     _getFocusData();
     _getHotProductData();
     _getBestProductData();
+    SearchServices.setSearchData("aaa");
   }
 
   _getFocusData() async {

@@ -145,6 +145,7 @@ class _CategoryPageState extends State<CategoryPage>
                       ],
                     )),
                     onTap: () {
+                      // print('tap');
                       Navigator.pushNamed(context, '/productList', arguments: {
                         "cid": _rightCateList[index].sId,
                       });
