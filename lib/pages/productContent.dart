@@ -1,9 +1,15 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import '../widget/loadingWidget.dart';
 import '../services/screenAdapter.dart';
 import 'productContent/productContentFirst.dart';
 import 'productContent/productContentSecond.dart';
 import 'productContent/productContentThird.dart';
 import '../widget/jdButton.dart';
+import '../model/productContentModel.dart';
+import '../config/config.dart';
+import 'package:dio/dio.dart';
+
 
 class ProductContentPage extends StatefulWidget {
   Map? arguments;
@@ -22,6 +28,30 @@ class _ProductContentPageState extends State<ProductContentPage>
   void initState() {
     super.initState();
     _controller = AnimationController(vsync: this);
+    _getContentData();
+  }
+
+  var _productContentList = [];
+
+  _getContentData() async {
+    // setState(() {
+    //   _flag = false;
+    // });
+    var api;
+
+    api = '${Config.domain}/api/pcontent?id=${widget.arguments?["id"]}';
+
+    var result = await Dio().get(api);
+    // print(api);
+    var productContent = result.data is Map
+        ? ProductContentModel.fromJson(result.data)
+        : ProductContentModel.fromJson(json.decode(result.data));
+
+    // print(productList.result is Map);
+
+    setState(() {
+      _productContentList.add(productContent.result);
+    });
   }
 
   @override
@@ -81,13 +111,13 @@ class _ProductContentPageState extends State<ProductContentPage>
                 icon: Icon(Icons.more_horiz))
           ],
         ),
-        body: Stack(
+        body: _productContentList.length>0? Stack(
           children: [
             TabBarView(
               children: [
-                ProductContentFirst(),
-                ProductContentSecond(),
-                ProductContentThird(),
+                ProductContentFirst(_productContentList),
+                ProductContentSecond(_productContentList),
+                ProductContentThird(_productContentList),
               ],
             ),
             Positioned(
@@ -140,7 +170,7 @@ class _ProductContentPageState extends State<ProductContentPage>
               ),
             ),
           ],
-        ),
+        ): LoadingWidget(),
       ),
     );
   }

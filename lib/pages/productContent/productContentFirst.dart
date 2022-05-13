@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:jdshop/services/screenAdapter.dart';
 import 'package:jdshop/widget/jdButton.dart';
+import '../../config/config.dart';
 
 class ProductContentFirst extends StatefulWidget {
-  const ProductContentFirst({Key? key}) : super(key: key);
+  List _productContentList;
+
+  ProductContentFirst(
+    this._productContentList, {
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<ProductContentFirst> createState() => _ProductContentFirstState();
@@ -11,11 +17,15 @@ class ProductContentFirst extends StatefulWidget {
 
 class _ProductContentFirstState extends State<ProductContentFirst>
     with SingleTickerProviderStateMixin {
+  var _productContent;
+  List _attr = [];
   late AnimationController _controller;
 
   @override
   void initState() {
     super.initState();
+    _productContent = widget._productContentList[0];
+    _attr = _productContent.attr;
     _controller = AnimationController(vsync: this);
   }
 
@@ -25,6 +35,46 @@ class _ProductContentFirstState extends State<ProductContentFirst>
     super.dispose();
   }
 
+
+
+  List<Widget> _getAttrWidget() {
+    List<Widget> attrList = [];
+    _attr.forEach((attrItem) {
+      attrList.add(Wrap(
+        children: [
+          Container(
+              width: ScreenAdapter.width(120),
+              child: Padding(
+                  padding: EdgeInsets.only(top: ScreenAdapter.height(28)),
+                  child: Text(
+                    "${attrItem.cate}:",
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ))),
+          Container(
+            width: ScreenAdapter.width(580),
+            child: Wrap(
+              children: _getAttrItemWidget(attrItem),
+            ),
+          )
+        ],
+      ));
+    });
+    return attrList;
+  }
+
+  _getAttrItemWidget(attrItem){
+    List <Widget> attrItemList = [];
+    attrItem.list.forEach((item){
+      attrItemList.add(Container(
+        margin: EdgeInsets.all(10),
+        child: Chip(
+          label: Text("${item}"),
+          padding: EdgeInsets.all(10),
+        )
+      ));
+    });
+    return attrItemList;
+  }
   _attrBottomSheet() {
     showModalBottomSheet(
         context: context,
@@ -36,107 +86,8 @@ class _ProductContentFirstState extends State<ProductContentFirst>
                 child: ListView(
                   children: [
                     Column(
-                      children: [
-                        Wrap(
-                          children: [
-                            Container(
-                                width: ScreenAdapter.width(100),
-                                child: Padding(
-                                    padding: EdgeInsets.only(
-                                        top: ScreenAdapter.height(22)),
-                                    child: Text(
-                                      "Color:",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold),
-                                    ))),
-                            Container(
-                              width: ScreenAdapter.width(610),
-                              child: Wrap(
-                                children: [
-                                  Container(
-                                    margin: EdgeInsets.all(10),
-                                    child: Chip(
-                                        label: Text("White"),
-                                        padding: EdgeInsets.all(10)),
-                                  ),
-                                  Container(
-                                    margin: EdgeInsets.all(10),
-                                    child: Chip(
-                                        label: Text("Red"),
-                                        padding: EdgeInsets.all(10)),
-                                  ),
-                                ],
-                              ),
-                            )
-                          ],
-                        ),
-                        Wrap(
-                          children: [
-                            Container(
-                                width: ScreenAdapter.width(100),
-                                child: Padding(
-                                    padding: EdgeInsets.only(
-                                        top: ScreenAdapter.height(22)),
-                                    child: Text(
-                                      "Style:",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold),
-                                    ))),
-                            Container(
-                              width: ScreenAdapter.width(610),
-                              child: Wrap(
-                                children: [
-                                  Container(
-                                    margin: EdgeInsets.all(10),
-                                    child: Chip(
-                                        label: Text("White"),
-                                        padding: EdgeInsets.all(10)),
-                                  ),
-                                  Container(
-                                    margin: EdgeInsets.all(10),
-                                    child: Chip(
-                                        label: Text("Red"),
-                                        padding: EdgeInsets.all(10)),
-                                  ),
-                                ],
-                              ),
-                            )
-                          ],
-                        ),
-                        Wrap(
-                          children: [
-                            Container(
-                                width: ScreenAdapter.width(100),
-                                child: Padding(
-                                    padding: EdgeInsets.only(
-                                        top: ScreenAdapter.height(22)),
-                                    child: Text(
-                                      "Size:",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold),
-                                    ))),
-                            Container(
-                              width: ScreenAdapter.width(610),
-                              child: Wrap(
-                                children: [
-                                  Container(
-                                    margin: EdgeInsets.all(10),
-                                    child: Chip(
-                                        label: Text("White"),
-                                        padding: EdgeInsets.all(10)),
-                                  ),
-                                  Container(
-                                    margin: EdgeInsets.all(10),
-                                    child: Chip(
-                                        label: Text("Red"),
-                                        padding: EdgeInsets.all(10)),
-                                  ),
-                                ],
-                              ),
-                            )
-                          ],
-                        ),
-                      ],
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: _getAttrWidget(),
                     )
                   ],
                 ),
@@ -150,26 +101,23 @@ class _ProductContentFirstState extends State<ProductContentFirst>
                       Expanded(
                           flex: 1,
                           child: Container(
-                            child: JdButton(
-                                color: Color.fromRGBO(253, 1, 0, 0.9),
-                                text: "Add into cart",
-                                cb: (){
-                                  print("Add into cart");
-                                }
-                            ),
-                            margin: EdgeInsets.fromLTRB(10, 0, 5, 0)
-                          )),
+                              child: JdButton(
+                                  color: Color.fromRGBO(253, 1, 0, 0.9),
+                                  text: "Add into cart",
+                                  cb: () {
+                                    print("Add into cart");
+                                  }),
+                              margin: EdgeInsets.fromLTRB(10, 0, 5, 0))),
                       Expanded(
                           flex: 1,
                           child: Container(
                             child: JdButton(
                                 color: Color.fromRGBO(253, 165, 0, 0.9),
                                 text: "Buy",
-                                cb: (){
+                                cb: () {
                                   print("Buy");
-                                }
-                            ),
-                              margin: EdgeInsets.fromLTRB(5, 0, 10, 0),
+                                }),
+                            margin: EdgeInsets.fromLTRB(5, 0, 10, 0),
                           )),
                     ],
                   ))
@@ -180,19 +128,19 @@ class _ProductContentFirstState extends State<ProductContentFirst>
 
   @override
   Widget build(BuildContext context) {
+    String pic = Config.domain + '/' + _productContent.pic;
+    pic = pic.replaceAll("\\", '/');
     return Container(
         padding: EdgeInsets.all(10),
         child: ListView(
           children: [
             AspectRatio(
-                aspectRatio: 16 / 9,
-                child: Image.network(
-                    "https://www.itying.com/images/flutter/p1.jpg",
-                    fit: BoxFit.cover)),
+                aspectRatio: 1 / 1,
+                child: Image.network(pic, fit: BoxFit.cover)),
             Container(
               padding: EdgeInsets.only(top: 10),
               child: Text(
-                "think pad 480 laptop",
+                "${_productContent.title}",
                 style: TextStyle(
                   color: Colors.black87,
                   fontSize: ScreenAdapter.size(36),
@@ -202,7 +150,7 @@ class _ProductContentFirstState extends State<ProductContentFirst>
             Container(
               padding: EdgeInsets.only(top: 10),
               child: Text(
-                "xxxxxxxxxxxxxxx",
+                "${_productContent.subTitle}",
                 style: TextStyle(
                   color: Colors.black54,
                   fontSize: ScreenAdapter.size(28),
@@ -219,7 +167,7 @@ class _ProductContentFirstState extends State<ProductContentFirst>
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             Text("Price"),
-                            Text("\$23",
+                            Text("\$${_productContent.price}",
                                 style: TextStyle(
                                     color: Colors.red,
                                     fontSize: ScreenAdapter.size(46))),
@@ -231,7 +179,7 @@ class _ProductContentFirstState extends State<ProductContentFirst>
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
                             Text("Original Price"),
-                            Text("\$53",
+                            Text("\$${_productContent.oldPrice}",
                                 style: TextStyle(
                                     color: Colors.black38,
                                     fontSize: ScreenAdapter.size(28),
