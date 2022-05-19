@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import '../../provider/counter.dart';
+import 'package:provider/provider.dart';
+
 
 class UserPage extends StatefulWidget {
   const UserPage({Key? key}) : super(key: key);
@@ -24,8 +27,17 @@ class _UserPageState extends State<UserPage> with SingleTickerProviderStateMixin
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Text("This is user page")
+    var counterProvider = Provider.of<Counter>(context);
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("User profile"),
+
+      ),
+        body: Center(
+            child:Container(
+                child: Text("${counterProvider.count}")
+            )
+        )
     );
   }
 }

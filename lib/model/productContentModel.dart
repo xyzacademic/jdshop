@@ -5,7 +5,7 @@ class ProductContentModel {
 
   ProductContentModel.fromJson(Map<String, dynamic> json) {
     result =
-    json['result'] != null ? new Result.fromJson(json['result']) : null;
+        json['result'] != null ? new Result.fromJson(json['result']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -33,23 +33,27 @@ class Result {
   List<Attr>? attr;
   String? subTitle;
   Object? salecount;
+  int? count;
+  String? selectedAttr;
 
   Result(
       {this.sId,
-        this.title,
-        this.cid,
-        this.price,
-        this.oldPrice,
-        this.isBest,
-        this.isHot,
-        this.isNew,
-        this.status,
-        this.pic,
-        this.content,
-        this.cname,
-        this.attr,
-        this.subTitle,
-        this.salecount});
+      this.title,
+      this.cid,
+      this.price,
+      this.oldPrice,
+      this.isBest,
+      this.isHot,
+      this.isNew,
+      this.status,
+      this.pic,
+      this.content,
+      this.cname,
+      this.attr,
+      this.subTitle,
+      this.salecount,
+      this.count,
+      this.selectedAttr});
 
   Result.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
@@ -64,6 +68,9 @@ class Result {
     pic = json['pic'];
     content = json['content'];
     cname = json['cname'];
+    count = 1;
+    selectedAttr = "";
+
     if (json['attr'] != null) {
       attr = <Attr>[];
       json['attr'].forEach((v) {
@@ -100,12 +107,14 @@ class Result {
 class Attr {
   String? cate;
   List<String>? list;
+  List<Map>? attrList;
 
   Attr({this.cate, this.list});
 
   Attr.fromJson(Map<String, dynamic> json) {
     cate = json['cate'];
     list = json['list'].cast<String>();
+    attrList = [];
   }
 
   Map<String, dynamic> toJson() {
@@ -115,4 +124,3 @@ class Attr {
     return data;
   }
 }
-

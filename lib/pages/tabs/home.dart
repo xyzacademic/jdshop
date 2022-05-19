@@ -9,7 +9,6 @@ import '../../config/config.dart';
 import '../../widget/loadingWidget.dart';
 import '../../services/searchServices.dart';
 
-
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
 
@@ -19,8 +18,6 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage>
     with AutomaticKeepAliveClientMixin {
-
-
   @override
   // TODO: implement wantKeepAlive
   bool get wantKeepAlive => true;
@@ -79,7 +76,6 @@ class _HomePageState extends State<HomePage>
 
   @override
   void dispose() {
-
     super.dispose();
   }
 
@@ -129,7 +125,6 @@ class _HomePageState extends State<HomePage>
           width: double.infinity,
           padding: EdgeInsets.all(ScreenAdapter.width(20)),
           child: ListView.builder(
-
             scrollDirection: Axis.horizontal,
             itemBuilder: (context, index) {
               String sPic = this._hotProductList[index].sPic;
@@ -139,9 +134,7 @@ class _HomePageState extends State<HomePage>
                   height: ScreenAdapter.height(140),
                   width: ScreenAdapter.width(140),
                   margin: EdgeInsets.only(right: ScreenAdapter.width(21)),
-                  child: Image.network(
-                      sPic,
-                      fit: BoxFit.cover),
+                  child: Image.network(sPic, fit: BoxFit.cover),
                 ),
                 Container(
                   padding: EdgeInsets.only(top: ScreenAdapter.height(10)),
@@ -158,13 +151,13 @@ class _HomePageState extends State<HomePage>
     }
   }
 
-  Widget _recProductListWidget(){
+  Widget _recProductListWidget() {
     return Container(
       padding: EdgeInsets.all(10),
       child: Wrap(
         runSpacing: 10,
         spacing: 10,
-        children: this._bestProductList.map((value){
+        children: this._bestProductList.map((value) {
           return _recProductList(value);
         }).toList(),
       ),
@@ -175,24 +168,22 @@ class _HomePageState extends State<HomePage>
     var itemWidth = (ScreenAdapter.getScreenWidth() - 30) / 2;
     var sImg = value.sPic;
     sImg = Config.domain + '/' + sImg.replaceAll('\\', '/');
-      return InkWell(
+    return InkWell(
         child: Container(
             padding: EdgeInsets.all(10),
             width: itemWidth,
             decoration: BoxDecoration(
                 border: Border.all(
-                  color: Color.fromRGBO(233, 233, 233, 0.9),
-                  width: 1,
-                )),
+              color: Color.fromRGBO(233, 233, 233, 0.9),
+              width: 1,
+            )),
             child: Column(
               children: <Widget>[
                 Container(
                     width: double.infinity,
                     child: AspectRatio(
                         aspectRatio: 1 / 1,
-                        child: Image.network(
-                            sImg,
-                            fit: BoxFit.cover))),
+                        child: Image.network(sImg, fit: BoxFit.cover))),
                 Padding(
                   padding: EdgeInsets.only(top: ScreenAdapter.height(20)),
                   child: Text(value.title,
@@ -226,32 +217,60 @@ class _HomePageState extends State<HomePage>
                       ],
                     )),
               ],
-            )
-        ),
-        onTap: (){
+            )),
+        onTap: () {
           Navigator.pushNamed(context, '/productContent',
-          arguments: {"id": value.sId});
-        }
-      );
-
-
+              arguments: {"id": value.sId});
+        });
   }
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      children: [
-        _swiperWidget(),
-        SizedBox(height: ScreenAdapter.height(20)),
-        _titleWidget("Guess what you will like."),
-        SizedBox(height: ScreenAdapter.height(20)),
-        _userLikeList(),
-        // SizedBox(height: ScreenAdapter.height(20)),
-        _titleWidget("Recommend"),
-        _recProductListWidget(),
-      ],
-    );
+    return Scaffold(
+        appBar: AppBar(
+          leading: IconButton(
+            icon:
+                Icon(Icons.center_focus_weak, size: 28, color: Colors.black87),
+            onPressed: null,
+          ),
+          title: InkWell(
+            child: Container(
+              height: ScreenAdapter.height(68),
+              decoration: BoxDecoration(
+                color: Color.fromRGBO(233, 233, 233, 0.8),
+                borderRadius: BorderRadius.circular(30),
+              ),
+              padding: EdgeInsets.only(left: 10),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Icon(Icons.search),
+                  Text("Search",
+                      style: TextStyle(fontSize: ScreenAdapter.size(28)))
+                ],
+              ),
+            ),
+            onTap: () {
+              Navigator.pushNamed(context, "/search");
+            },
+          ),
+          actions: [
+            IconButton(
+                onPressed: null,
+                icon: Icon(Icons.message, size: 28, color: Colors.black87))
+          ],
+        ),
+        body: ListView(
+          children: [
+            _swiperWidget(),
+            SizedBox(height: ScreenAdapter.height(20)),
+            _titleWidget("Guess what you will like."),
+            SizedBox(height: ScreenAdapter.height(20)),
+            _userLikeList(),
+            // SizedBox(height: ScreenAdapter.height(20)),
+            _titleWidget("Recommend"),
+            _recProductListWidget(),
+          ],
+        ));
   }
-
-
 }

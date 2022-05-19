@@ -9,6 +9,10 @@ import '../widget/jdButton.dart';
 import '../model/productContentModel.dart';
 import '../config/config.dart';
 import 'package:dio/dio.dart';
+import '../services/eventBus.dart';
+import '../provider/cart.dart';
+import 'package:provider/provider.dart';
+import '../services/cartServices.dart';
 
 
 class ProductContentPage extends StatefulWidget {
@@ -62,6 +66,7 @@ class _ProductContentPageState extends State<ProductContentPage>
 
   @override
   Widget build(BuildContext context) {
+    var cartProvider = Provider.of<Cart>(context);
     return DefaultTabController(
       length: 3,
       child: Scaffold(
@@ -144,8 +149,17 @@ class _ProductContentPageState extends State<ProductContentPage>
                         child: JdButton(
                           color: Color.fromRGBO(253, 1, 0, 0.9),
                           text: "Add into cart",
-                          cb: (){
-                            print("Add into cart");
+                          cb: () async {
+
+                            if (_productContentList[0].attr.length>0){
+                              eventBus.fire(ProductContentEvent("Add into cart"));
+                            } else {
+                              // print("Add into cart");
+                              await CartServices.addCart(_productContentList[0]);
+                              Navigator.of(context).pop();
+                              cartProvider.updateCartList();
+                            }
+
                           }
                         )),
                     Expanded(
@@ -154,7 +168,13 @@ class _ProductContentPageState extends State<ProductContentPage>
                             color: Color.fromRGBO(253, 165, 0, 0.9),
                             text: "Buy",
                             cb: (){
-                              print("Buy");
+                              if (_productContentList[0].attr.length>0) {
+                                eventBus.fire(ProductContentEvent("Buy"));
+                              } else {
+                                print("Buy");
+                              }
+
+
                             }
                         )),
                   ],

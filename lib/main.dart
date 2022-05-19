@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'routers/router.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
+import 'provider/counter.dart';
+import 'provider/cart.dart';
+
 
 void main() {
   runApp(const MyApp());
@@ -35,7 +39,20 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
       minTextAdapt: true,
       splitScreenMode: true,
       builder: (child) {
-        return MaterialApp(
+        return MultiProvider(
+            providers: [
+              ChangeNotifierProvider(
+               create: (BuildContext context) {
+                 return Counter();
+                 },
+              ),
+              ChangeNotifierProvider(
+                create: (BuildContext context) {
+                  return Cart();
+                },
+              ),
+            ],
+        child: MaterialApp(
             debugShowCheckedModeBanner: false,
             // title: 'First Method',
             // You can use the library anywhere in the app even in theme
@@ -43,13 +60,13 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
             initialRoute: '/',
             onGenerateRoute: onGenerateRoute,
             theme: ThemeData(
-                // colorScheme: ColorScheme.light()
+              // colorScheme: ColorScheme.light()
               // primarySwatch: Colors.grey,
               // brightness: Brightness.light,
 
               // primaryColor: Colors.black54,
               // backgroundColor: Colors.white,
-            ));
+            )));
       },
       // child: const HomePage(title: 'First Method'),
     );

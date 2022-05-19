@@ -82,7 +82,39 @@ class _TabsState extends State<Tabs> with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: _getAppBar(),
+      // appBar: _getAppBar(),
+      // appBar: AppBar(
+      //   leading: IconButton(
+      //     icon: Icon(Icons.center_focus_weak, size: 28, color: Colors.black87),
+      //     onPressed: null,
+      //   ),
+      //   title: InkWell(
+      //     child: Container(
+      //       height: ScreenAdapter.height(68),
+      //       decoration: BoxDecoration(
+      //         color: Color.fromRGBO(233, 233, 233, 0.8),
+      //         borderRadius: BorderRadius.circular(30),
+      //       ),
+      //       padding: EdgeInsets.only(left: 10),
+      //       child: Row(
+      //         crossAxisAlignment: CrossAxisAlignment.center,
+      //         children: [
+      //           Icon(Icons.search),
+      //           Text("Search",
+      //               style: TextStyle(fontSize: ScreenAdapter.size(28)))
+      //         ],
+      //       ),
+      //     ),
+      //     onTap: () {
+      //       Navigator.pushNamed(context, "/search");
+      //     },
+      //   ),
+      //   actions: [
+      //     IconButton(
+      //         onPressed: null,
+      //         icon: Icon(Icons.message, size: 28, color: Colors.black87))
+      //   ],
+      // ),
       body: PageView(
         controller: _pageController,
         children: _pageList,
