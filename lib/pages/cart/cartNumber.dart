@@ -3,8 +3,11 @@ import 'package:provider/provider.dart';
 import '../../provider/counter.dart';
 import '../../provider/cart.dart';
 import '../../services/screenAdapter.dart';
+
+
 class CartNumber extends StatefulWidget {
   Map _itemData;
+
   CartNumber(this._itemData, {Key? key}) : super(key: key);
 
   @override
@@ -13,58 +16,62 @@ class CartNumber extends StatefulWidget {
 
 class _CartNumberState extends State<CartNumber> {
   late Map _itemData;
+  var cartProvider;
+
   @override
-  void initState(){
+  void initState() {
     super.initState();
     _itemData = widget._itemData;
   }
-  Widget _leftBtn(){
-    return InkWell(
-      onTap: (){
 
-      },
-      child:Container(
-        alignment: Alignment.center,
-        width: ScreenAdapter.width(45),
-        height: ScreenAdapter.height(45),
-        child: Text("-"),
-      )
-    );
+  Widget _leftBtn() {
+    return InkWell(
+        onTap: () {
+          if (_itemData['count'] > 1) {
+            _itemData['count']--;
+          }
+          cartProvider.itemCountChange();
+        },
+        child: Container(
+          alignment: Alignment.center,
+          width: ScreenAdapter.width(45),
+          height: ScreenAdapter.height(45),
+          child: Text("-"),
+        ));
   }
 
-  Widget _centerArea(){
+  Widget _centerArea() {
+    cartProvider = Provider.of<Cart>(context);
     return Container(
       alignment: Alignment.center,
       width: ScreenAdapter.width(70),
       height: ScreenAdapter.height(45),
       child: Text("${_itemData['count']}"),
       decoration: BoxDecoration(
-        border: Border(
-          left: BorderSide(
-            width: 1,
-            color: Colors.black12,
-          ),
-            right: BorderSide(
-              width: 1,
-              color: Colors.black12,
-            )
-        )
-      ),
+          border: Border(
+              left: BorderSide(
+                width: 1,
+                color: Colors.black12,
+              ),
+              right: BorderSide(
+                width: 1,
+                color: Colors.black12,
+              ))),
     );
   }
 
-  Widget _rightBtn(){
+  Widget _rightBtn() {
     return InkWell(
-      onTap:(){
-
-      },
-      child:Container(
-        alignment: Alignment.center,
-        width: ScreenAdapter.width(45),
-        height: ScreenAdapter.height(45),
-        child: Text("+"),
-      )
-    );
+        onTap: () {
+          _itemData['count']++;
+          cartProvider.itemCountChange();
+        },
+        child: Container(
+          alignment: Alignment.center,
+          width: ScreenAdapter.width(45),
+          height: ScreenAdapter.height(45),
+          child: Text("+"),
+        ));
   }
 
   @override
@@ -74,15 +81,14 @@ class _CartNumberState extends State<CartNumber> {
     return Container(
       width: ScreenAdapter.width(165),
       decoration: BoxDecoration(
-        border: Border.all(
-          width:1,
-          color: Colors.black12,
-        )
-      ),
+          border: Border.all(
+        width: 1,
+        color: Colors.black12,
+      )),
       child: Row(
         children: [
-            _leftBtn(),
-            _centerArea(),
+          _leftBtn(),
+          _centerArea(),
           _rightBtn(),
         ],
       ),

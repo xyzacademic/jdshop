@@ -40,8 +40,12 @@ class _CartItemState extends State<CartItem> {
           Container(
               width: ScreenAdapter.width(60),
               child: Checkbox(
-                value: true,
-                onChanged: (val) {},
+                value: _itemData['checked'],
+                onChanged: (val) {
+                  _itemData['checked'] = !_itemData['checked'];
+
+                  cartProvider.itemChange();
+                },
                 activeColor: Colors.pink,
               )),
           Container(
@@ -58,7 +62,8 @@ class _CartItemState extends State<CartItem> {
                   children: [
                     Text(
                       "${_itemData['title']}",
-                      maxLines: 1, overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
                     Text(
                       "${_itemData['selectedAttr']}",
