@@ -13,7 +13,7 @@ import '../services/eventBus.dart';
 import '../provider/cart.dart';
 import 'package:provider/provider.dart';
 import '../services/cartServices.dart';
-
+import 'package:fluttertoast/fluttertoast.dart';
 
 class ProductContentPage extends StatefulWidget {
   Map? arguments;
@@ -133,7 +133,11 @@ class _ProductContentPageState extends State<ProductContentPage>
                 // color: Colors.red,
                 child: Row(
                   children: [
-                    Container(
+                    InkWell(
+                      onTap: (){
+                        Navigator.pushNamed(context, '/cart');
+                      },
+                        child: Container(
                         padding: EdgeInsets.only(top: ScreenAdapter.height(8)),
                         width: 100,
                         height: ScreenAdapter.height(80),
@@ -143,7 +147,7 @@ class _ProductContentPageState extends State<ProductContentPage>
                             Icon(Icons.shopping_cart, size: ScreenAdapter.size(38)),
                             Text("Cart", style: TextStyle(fontSize: ScreenAdapter.size(24))),
                           ],
-                        )),
+                        ))),
                     Expanded(
                         flex: 1,
                         child: JdButton(
@@ -158,6 +162,11 @@ class _ProductContentPageState extends State<ProductContentPage>
                               await CartServices.addCart(_productContentList[0]);
                               Navigator.of(context).pop();
                               cartProvider.updateCartList();
+                              Fluttertoast.showToast(
+                                  msg: "Add into cart successfully",
+                                  toastLength: Toast.LENGTH_SHORT,
+                                gravity: ToastGravity.CENTER,
+                              );
                             }
 
                           }

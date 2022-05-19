@@ -44,7 +44,7 @@ class CartServices {
     sPic = Config.domain + '/' + sPic.replaceAll('\\', '/');
     data['_id'] = item.sId;
     data['title'] = item.title;
-    data['price'] = item.price;
+    data['price'] = item.price is String? double.parse(item.price): item.price;
     data['selectedAttr'] = item.selectedAttr;
     data['count'] = item.count;
     data['pic'] = sPic;

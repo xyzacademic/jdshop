@@ -20,11 +20,12 @@ class _CartItemState extends State<CartItem> {
   @override
   void initState() {
     super.initState();
-    _itemData = widget._itemData;
+
   }
 
   @override
   Widget build(BuildContext context) {
+    _itemData = widget._itemData;
     var cartProvider = Provider.of<Cart>(context);
     return Container(
       padding: EdgeInsets.all(5),

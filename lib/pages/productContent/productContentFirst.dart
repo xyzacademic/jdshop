@@ -7,6 +7,7 @@ import '../../services/eventBus.dart';
 import 'cartNumber.dart';
 import '../../../provider/cart.dart';
 import 'package:provider/provider.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class ProductContentFirst extends StatefulWidget {
   List _productContentList;
@@ -26,8 +27,10 @@ class _ProductContentFirstState extends State<ProductContentFirst>
   List _attr = [];
   String _selectedValue = "";
   var _actionEventBus;
+
   bool get wantKeepAlive => true;
   var cartProvider;
+
   @override
   void initState() {
     super.initState();
@@ -36,7 +39,7 @@ class _ProductContentFirstState extends State<ProductContentFirst>
     _initAttr();
 
     _getSelectedAttrValue();
-    _actionEventBus = eventBus.on<ProductContentEvent>().listen((str){
+    _actionEventBus = eventBus.on<ProductContentEvent>().listen((str) {
       // print(str);
       _attrBottomSheet();
     });
@@ -136,7 +139,9 @@ class _ProductContentFirstState extends State<ProductContentFirst>
           margin: EdgeInsets.all(10),
           child: InkWell(
             child: Chip(
-              label: Text("${item["title"]}"),
+              label: Text("${item["title"]}",
+                  style: TextStyle(
+                      color: item["checked"] ? Colors.white : Colors.black54)),
               padding: EdgeInsets.all(10),
               backgroundColor: item["checked"] ? Colors.red : Colors.black26,
             ),
@@ -172,7 +177,8 @@ class _ProductContentFirstState extends State<ProductContentFirst>
                           child: Row(
                             children: [
                               Text("Numbers: ",
-                                  style: TextStyle(fontWeight: FontWeight.bold)),
+                                  style:
+                                      TextStyle(fontWeight: FontWeight.bold)),
                               SizedBox(width: 10),
                               CartNumber(_productContent),
                             ],
@@ -199,9 +205,15 @@ class _ProductContentFirstState extends State<ProductContentFirst>
                                     text: "Add into cart",
                                     cb: () async {
                                       print("Add into cart");
-                                      await CartServices.addCart(_productContent);
+                                      await CartServices.addCart(
+                                          _productContent);
                                       Navigator.of(context).pop();
                                       cartProvider.updateCartList();
+                                      Fluttertoast.showToast(
+                                        msg: "Add into cart successfully",
+                                        toastLength: Toast.LENGTH_SHORT,
+                                        gravity: ToastGravity.CENTER,
+                                      );
                                     }),
                                 margin: EdgeInsets.fromLTRB(10, 0, 5, 0))),
                         Expanded(

@@ -21,7 +21,7 @@ class _CartNumberState extends State<CartNumber> {
   @override
   void initState() {
     super.initState();
-    _itemData = widget._itemData;
+
   }
 
   Widget _leftBtn() {
@@ -41,6 +41,7 @@ class _CartNumberState extends State<CartNumber> {
   }
 
   Widget _centerArea() {
+    _itemData = widget._itemData;
     cartProvider = Provider.of<Cart>(context);
     return Container(
       alignment: Alignment.center,
