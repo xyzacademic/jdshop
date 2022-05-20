@@ -173,19 +173,14 @@ class _ProductContentFirstState extends State<ProductContentFirst>
                       Container(
                         margin: EdgeInsets.only(top: 10),
                         height: ScreenAdapter.height(80),
-                        child: InkWell(
-                          child: Row(
-                            children: [
-                              Text("Numbers: ",
-                                  style:
-                                      TextStyle(fontWeight: FontWeight.bold)),
-                              SizedBox(width: 10),
-                              CartNumber(_productContent),
-                            ],
-                          ),
-                          onTap: () {
-                            _attrBottomSheet();
-                          },
+                        child: Row(
+                          children: [
+                            Text("Numbers: ",
+                                style:
+                                TextStyle(fontWeight: FontWeight.bold)),
+                            SizedBox(width: 10),
+                            CartNumber(_productContent),
+                          ],
                         ),
                       )
                     ],
@@ -203,7 +198,7 @@ class _ProductContentFirstState extends State<ProductContentFirst>
                                 child: JdButton(
                                     color: Color.fromRGBO(253, 1, 0, 0.9),
                                     text: "Add into cart",
-                                    cb: () async {
+                                    onTap: () async {
                                       print("Add into cart");
                                       await CartServices.addCart(
                                           _productContent);
@@ -222,7 +217,7 @@ class _ProductContentFirstState extends State<ProductContentFirst>
                               child: JdButton(
                                   color: Color.fromRGBO(253, 165, 0, 0.9),
                                   text: "Buy",
-                                  cb: () {
+                                  onTap: () {
                                     print("Buy");
                                   }),
                               margin: EdgeInsets.fromLTRB(5, 0, 10, 0),

@@ -119,6 +119,7 @@ class _ProductContentPageState extends State<ProductContentPage>
         body: _productContentList.length>0? Stack(
           children: [
             TabBarView(
+              physics: NeverScrollableScrollPhysics(),
               children: [
                 ProductContentFirst(_productContentList),
                 ProductContentSecond(_productContentList),
@@ -153,7 +154,7 @@ class _ProductContentPageState extends State<ProductContentPage>
                         child: JdButton(
                           color: Color.fromRGBO(253, 1, 0, 0.9),
                           text: "Add into cart",
-                          cb: () async {
+                          onTap: () async {
 
                             if (_productContentList[0].attr.length>0){
                               eventBus.fire(ProductContentEvent("Add into cart"));
@@ -176,7 +177,7 @@ class _ProductContentPageState extends State<ProductContentPage>
                         child: JdButton(
                             color: Color.fromRGBO(253, 165, 0, 0.9),
                             text: "Buy",
-                            cb: (){
+                            onTap: (){
                               if (_productContentList[0].attr.length>0) {
                                 eventBus.fire(ProductContentEvent("Buy"));
                               } else {

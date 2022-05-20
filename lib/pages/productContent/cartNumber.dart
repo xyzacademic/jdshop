@@ -49,11 +49,11 @@ class _CartNumberState extends State<CartNumber> {
       decoration: BoxDecoration(
         border: Border(
           left: BorderSide(
-            width: 1,
+            width: ScreenAdapter.width(2),
             color: Colors.black12,
           ),
             right: BorderSide(
-              width: 1,
+              width: ScreenAdapter.width(2),
               color: Colors.black12,
             )
         )
@@ -81,10 +81,10 @@ class _CartNumberState extends State<CartNumber> {
   Widget build(BuildContext context) {
     var cartProvider = Provider.of<Cart>(context);
     return Container(
-      width: ScreenAdapter.width(165),
+      width: ScreenAdapter.width(168),
       decoration: BoxDecoration(
         border: Border.all(
-          width:1,
+          width:ScreenAdapter.width(2),
           color: Colors.black12,
         )
       ),

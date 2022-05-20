@@ -4,20 +4,22 @@ import '../services/screenAdapter.dart';
 class JdButton extends StatelessWidget {
   final Color color;
   final String text;
-  final Function()? cb;
+  final Function()? onTap;
+  final double height;
 
   JdButton(
-      {Key? key, this.color=Colors.black, this.text="Button", this.cb})
+      {Key? key, this.color=Colors.black, this.text="Button", this.onTap,
+      this.height=68})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: cb,
+      onTap: onTap,
       child: Container(
           margin: EdgeInsets.all(5),
           padding: EdgeInsets.all(5),
-          height: ScreenAdapter.height(68),
+          height: ScreenAdapter.height(this.height),
           width: double.infinity,
           decoration: BoxDecoration(
               color: color,

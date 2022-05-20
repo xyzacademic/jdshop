@@ -15,7 +15,7 @@ class Tabs extends StatefulWidget {
 class _TabsState extends State<Tabs> with SingleTickerProviderStateMixin {
   late AnimationController _controller;
 
-  int _currentIndex = 0;
+  int _currentIndex = 3;
   PageController? _pageController;
 
   List<Widget> _pageList = [
@@ -124,7 +124,7 @@ class _TabsState extends State<Tabs> with SingleTickerProviderStateMixin {
           });
         },
         //disable scroll vertically
-        // physics: NeverScrollableScrollPhysics(),
+        physics: NeverScrollableScrollPhysics(),
       ),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
