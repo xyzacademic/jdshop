@@ -20,7 +20,7 @@ final routes = {
   '/login': (context) => LoginPage(),
   '/registerFirst': (context) => RegisterFirstPage(),
   '/registerSecond': (context, {arguments}) => RegisterSecondPage(arguments: arguments),
-  '/registerThird': (context) => RegisterThirdPage(),
+  '/registerThird': (context, {arguments}) => RegisterThirdPage(arguments: arguments),
   // '/registerFirst': (context, {arguments}) => RegisterFirstPage(arguments:
   // arguments),
   // '/registerSecond': (context, {arguments}) => RegisterSecondPage(arguments:
