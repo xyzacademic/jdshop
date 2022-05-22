@@ -4,6 +4,8 @@ import '../../services/userServices.dart';
 import '../../services/screenAdapter.dart';
 import '../../provider/counter.dart';
 import 'package:provider/provider.dart';
+import '../../services/eventBus.dart';
+
 
 class UserPage extends StatefulWidget {
   const UserPage({Key? key}) : super(key: key);
@@ -23,6 +25,11 @@ class _UserPageState extends State<UserPage>
     super.initState();
     _controller = AnimationController(vsync: this);
     _getUserInfo();
+
+    eventBus.on<UserEvent>().listen((event){
+      print(event.str);
+      _getUserInfo();
+    });
   }
 
   _getUserInfo() async {
@@ -126,13 +133,25 @@ class _UserPageState extends State<UserPage>
                 leading: Icon(Icons.people, color: Colors.black54),
                 title: Text("Customer services")),
             Divider(),
-            JdButton(
-              text: "Log out",
-              onTap: (){
-                UserServices.logout();
-                _getUserInfo();
-              },
+            Container(
+              padding: EdgeInsets.all(ScreenAdapter.height(20)),
+
+              child: _isLogin? JdButton(
+                text: "Log out",
+                color: Colors.red,
+                onTap: (){
+                  UserServices.logout();
+                  _getUserInfo();
+                },
+              ):JdButton(
+                text: "Log in",
+                color: Colors.blueAccent,
+                onTap: (){
+                  Navigator.pushNamed(context, '/login');
+                },
+              )
             )
+
           ],
         ));
   }

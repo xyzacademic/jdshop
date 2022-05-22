@@ -8,6 +8,15 @@ class ProductContentEvent{
   ProductContentEvent(String str){
     _str = str;
   }
+
+}
+
+class UserEvent{
+  String _str="";
+  String get str=>_str;
+  UserEvent(String str){
+    _str = str;
+  }
 }
 
 
