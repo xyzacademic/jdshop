@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:jdshop/pages/cart/cartNumber.dart';
+import 'package:jdshop/services/cartServices.dart';
 import 'package:jdshop/services/screenAdapter.dart';
+import 'package:jdshop/services/userServices.dart';
+import '../../provider/checkOut.dart';
 import '../cart/cartItem.dart';
 import '../../provider/counter.dart';
 import 'package:provider/provider.dart';
@@ -17,7 +21,7 @@ class _CartPageState extends State<CartPage>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   bool _isEdit = false;
-
+  var checkOutProvider;
   @override
   void initState() {
     super.initState();
@@ -30,10 +34,38 @@ class _CartPageState extends State<CartPage>
     super.dispose();
   }
 
+  doCheckOut() async {
+    var checkOutData = await CartServices.getCheckOutData();
+    checkOutProvider.changeCheckOutListData(checkOutData);
+
+    // check if selectd list is empty
+    if(checkOutData.isEmpty){
+      Fluttertoast.showToast(
+        msg: "You did not select any item",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+      );
+    } else {
+      var loginState = await UserServices.getUserLoginState();
+      if (loginState){
+        Navigator.pushNamed(context, '/checkOut');
+      } else{
+        Fluttertoast.showToast(
+          msg: "Please login firstly",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+        );
+        Navigator.pushNamed(context, '/login');
+      }
+    }
+
+  }
+
   @override
   Widget build(BuildContext context) {
     var counterProvider = Provider.of<Counter>(context);
     var cartProvider = Provider.of<Cart>(context);
+    checkOutProvider = Provider.of<CheckOut>(context);
     return Scaffold(
       appBar: AppBar(
         title: Text("Cart"),
@@ -103,10 +135,10 @@ class _CartPageState extends State<CartPage>
                                     alignment: Alignment.centerRight,
                                     child: ElevatedButton(
                                       child: Text(
-                                        "check in",
+                                        "check out",
                                         style: TextStyle(color: Colors.white),
                                       ),
-                                      onPressed: () {},
+                                      onPressed: doCheckOut,
                                       style: ElevatedButton.styleFrom(
                                         primary: Colors.red,
                                       ),

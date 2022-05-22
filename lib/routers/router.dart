@@ -8,6 +8,10 @@ import '../pages/login.dart';
 import '../pages/register/registerFirst.dart';
 import '../pages/register/registerSecond.dart';
 import '../pages/register/registerThird.dart';
+import '../pages/checkOut.dart';
+import '../pages/address/addressAdd.dart';
+import '../pages/address/addressList.dart';
+import '../pages/address/addressEdit.dart';
 
 final routes = {
   '/': (context, {arguments}) => Tabs(),
@@ -21,10 +25,11 @@ final routes = {
   '/registerFirst': (context) => RegisterFirstPage(),
   '/registerSecond': (context, {arguments}) => RegisterSecondPage(arguments: arguments),
   '/registerThird': (context, {arguments}) => RegisterThirdPage(arguments: arguments),
-  // '/registerFirst': (context, {arguments}) => RegisterFirstPage(arguments:
-  // arguments),
-  // '/registerSecond': (context, {arguments}) => RegisterSecondPage(arguments:
-  // arguments),
+  '/checkOut': (context) => CheckOutPage(),
+  '/addressAdd': (context)=> AddressAdd(),
+  '/addressEdit': (context)=> AddressEdit(),
+  '/addressList': (context)=> AddressListPage(),
+
 };
 
 var onGenerateRoute = (RouteSettings settings) {

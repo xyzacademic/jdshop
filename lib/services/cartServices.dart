@@ -44,7 +44,8 @@ class CartServices {
     sPic = Config.domain + '/' + sPic.replaceAll('\\', '/');
     data['_id'] = item.sId;
     data['title'] = item.title;
-    data['price'] = item.price is String? double.parse(item.price): item.price;
+    data['price'] =
+        item.price is String ? double.parse(item.price) : item.price;
     data['selectedAttr'] = item.selectedAttr;
     data['count'] = item.count;
     data['pic'] = sPic;
@@ -52,5 +53,22 @@ class CartServices {
     data['checked'] = true;
 
     return data;
+  }
+
+  static getCheckOutData() async {
+    var _cartList = [];
+    List tempCheckOutData = [];
+    String? cartList = await Storage.getString('cartList');
+    if (cartList != null) {
+      _cartList = json.decode(cartList);
+    }
+
+    for (var i = 0; i < _cartList.length; i++) {
+      if (_cartList[i]['checked'] == true) {
+        tempCheckOutData.add(_cartList[i]);
+      }
+    }
+
+    return tempCheckOutData;
   }
 }

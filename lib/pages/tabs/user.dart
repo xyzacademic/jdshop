@@ -35,6 +35,7 @@ class _UserPageState extends State<UserPage>
   _getUserInfo() async {
     var isLogin = await UserServices.getUserLoginState();
     var userInfo = await UserServices.getUserInfo();
+    if (!mounted) return;
     setState(() {
       _userInfo = userInfo;
       _isLogin = isLogin;

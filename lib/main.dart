@@ -4,7 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'provider/counter.dart';
 import 'provider/cart.dart';
-
+import 'provider/checkOut.dart';
 
 void main() {
   runApp(const MyApp());
@@ -51,13 +51,18 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
                   return Cart();
                 },
               ),
+              ChangeNotifierProvider(
+                create: (BuildContext context) {
+                  return CheckOut();
+                },
+              ),
             ],
         child: MaterialApp(
             debugShowCheckedModeBanner: false,
             // title: 'First Method',
             // You can use the library anywhere in the app even in theme
 
-            initialRoute: '/login',
+            initialRoute: '/addressAdd',
             onGenerateRoute: onGenerateRoute,
             theme: ThemeData(
               // colorScheme: ColorScheme.light()

@@ -6,14 +6,16 @@ class JDText extends StatelessWidget {
   String? text;
   bool password;
   var onChanged;
-
-  JDText({Key? key, this.text = "Enter", this.password = false, this.onChanged=null})
+  int maxLines;
+  double height;
+  JDText({Key? key, this.text = "Enter", this.password = false, this.onChanged=null,
+  this.maxLines=1, this.height=88})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: ScreenAdapter.height(88),
+      height: ScreenAdapter.height(height),
       decoration: BoxDecoration(
         // color: Color.fromRGBO(233, 233, 233, 0.8),
         // borderRadius: BorderRadius.circular(30),
@@ -26,6 +28,7 @@ class JDText extends StatelessWidget {
       ),
       child: TextField(
         // autofocus: true,
+        maxLines: maxLines,
         obscureText: this.password,
         decoration: InputDecoration(
             hintText: this.text,
