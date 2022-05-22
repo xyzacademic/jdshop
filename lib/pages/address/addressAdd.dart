@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:jdshop/services/screenAdapter.dart';
+import 'package:jdshop/services/signServices.dart';
+import 'package:jdshop/services/userServices.dart';
 import 'package:jdshop/widget/jdButton.dart';
+import '../../config/config.dart';
 import '../../widget/jdText.dart';
 import 'package:city_pickers/city_pickers.dart';
-
+import 'package:dio/dio.dart';
+import '../../services/eventBus.dart';
+import 'package:event_bus/event_bus.dart';
 class AddressAdd extends StatefulWidget {
   const AddressAdd({Key? key}) : super(key: key);
 
@@ -13,7 +18,14 @@ class AddressAdd extends StatefulWidget {
 
 class _AddressAddState extends State<AddressAdd> {
   String _area = "City";
+  String _name = '';
+  String _phone = '';
+  String _address = '';
 
+  dispose(){
+    super.dispose();
+    eventBus.fire(AddressEvent("Adding address successfully"));
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,9 +35,18 @@ class _AddressAddState extends State<AddressAdd> {
             child: ListView(
               children: [
                 SizedBox(height: ScreenAdapter.height(10)),
-                JDText(text: "Receiver"),
+                JDText(
+                  text: "Receiver",
+                  onChanged: (value) {
+                    _name = value;
+                  },
+                ),
                 SizedBox(height: ScreenAdapter.height(10)),
-                JDText(text: "Phone number"),
+                JDText(
+                    text: "Phone number",
+                    onChanged: (value) {
+                      _phone = value;
+                    }),
                 SizedBox(height: ScreenAdapter.height(10)),
                 Container(
                     padding: EdgeInsets.only(left: ScreenAdapter.height(5)),
@@ -55,7 +76,7 @@ class _AddressAddState extends State<AddressAdd> {
                           return;
                         } else if (result == null) {
                           setState(() {
-                            _area ="city";
+                            _area = "city";
                           });
                         } else {
                           setState(() {
@@ -65,7 +86,13 @@ class _AddressAddState extends State<AddressAdd> {
                         }
                       },
                     )),
-                JDText(text: "Mailing address", maxLines: 4, height: 200),
+                JDText(
+                    text: "Mailing address",
+                    maxLines: 4,
+                    height: 200,
+                    onChanged: (value) {
+                      _address = "${_area} " + value;
+                    }),
                 SizedBox(height: ScreenAdapter.height(10)),
                 // ElevatedButton(
                 //   onPressed: () async {
@@ -81,6 +108,30 @@ class _AddressAddState extends State<AddressAdd> {
                 JdButton(
                   text: "Add",
                   color: Colors.red,
+                  onTap: () async {
+                    List userInfo = await UserServices.getUserInfo();
+                    var tempJsonData = {
+                      'uid': userInfo[0]['_id'],
+                      'name': _name,
+                      'phone': _phone,
+                      'address': _address,
+                      'salt': userInfo[0]['salt'],
+                    };
+                    var sign = SignServices.getSign(tempJsonData);
+                    var api = "${Config.domain}/api/addAddress";
+                    var result = await Dio().post(api, data: {
+                      'uid': userInfo[0]['_id'],
+                      'name': _name,
+                      'phone': _phone,
+                      'address': _address,
+                      'sign': sign,
+
+                    });
+                    // print(result);
+                    if (result.data['success']){
+                      Navigator.pop(context);
+                    }
+                  },
                 ),
               ],
             )));

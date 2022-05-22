@@ -8,6 +8,7 @@ import 'package:dio/dio.dart';
 import '../../config/config.dart';
 import '../../widget/loadingWidget.dart';
 import '../../services/searchServices.dart';
+import '../../services/signServices.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -33,6 +34,7 @@ class _HomePageState extends State<HomePage>
     _getFocusData();
     _getHotProductData();
     _getBestProductData();
+    // SignServices.getSign();
     // SearchServices.setHistoryList("");
   }
 

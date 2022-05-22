@@ -17,7 +17,17 @@ class UserEvent{
   UserEvent(String str){
     _str = str;
   }
+
+
 }
 
+
+class AddressEvent{
+  String _str="";
+  String get str=>_str;
+  AddressEvent(String str){
+    _str = str;
+  }
+}
 
 
