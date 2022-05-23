@@ -123,52 +123,12 @@ class _AddressListPageState extends State<AddressListPage> {
             ListView.builder(
                 itemCount: _addressList.length,
                 itemBuilder: (context, index) {
-                  return _addressList[index]['default_address'] == 1
-                      ? Column(
+                  return  Column(
                           children: [
                             SizedBox(height: ScreenAdapter.height(20)),
                             ListTile(
-                              leading: Icon(Icons.check, color: Colors.red),
-                              title: InkWell(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                        "${_addressList[index]["name"]} ${_addressList[index]["phone"]}"),
-                                    SizedBox(height: ScreenAdapter.height(10)),
-                                    Text("${_addressList[index]["address"]}")
-                                  ],
-                                ),
-                                onTap: () {
-                                  _changeDefaultAddress(
-                                      _addressList[index]['_id']);
-                                },
-                                onLongPress: () {
-                                  _alertDialog(_addressList[index]['_id']);
-                                },
-                              ),
-                              trailing: IconButton(
-                                onPressed: () {
-                                  Navigator.pushNamed(context, '/addressEdit',
-                                      arguments: {
-                                        'id': _addressList[index]['_id'],
-                                        'name': _addressList[index]['name'],
-                                        'phone': _addressList[index]['phone'],
-                                        'address': _addressList[index]
-                                            ['address'],
-                                      });
-                                },
-                                icon: Icon(Icons.edit, color: Colors.blue),
-                              ),
-                            ),
-                            Divider(height: ScreenAdapter.height(20)),
-                          ],
-                        )
-                      : Column(
-                          children: [
-                            SizedBox(height: ScreenAdapter.height(20)),
-                            ListTile(
-                              // leading: Icon(Icons.check, color: Colors.red),
+                              leading: _addressList[index]['default_address'] == 1
+                                  ?Icon(Icons.check, color: Colors.red):Text(""),
                               title: InkWell(
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,

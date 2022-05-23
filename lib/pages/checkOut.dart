@@ -2,9 +2,11 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:jdshop/services/checkOutServices.dart';
 import 'package:jdshop/services/screenAdapter.dart';
 import 'package:provider/provider.dart';
 import '../config/config.dart';
+import '../provider/cart.dart';
 import '../provider/checkOut.dart';
 import '../services/signServices.dart';
 import '../services/userServices.dart';
@@ -22,17 +24,16 @@ class CheckOutPage extends StatefulWidget {
 }
 
 class _CheckOutPageState extends State<CheckOutPage> {
-
   List _addressList = [];
+
   @override
-  void initState(){
+  void initState() {
     super.initState();
 
     _getDefaultAddress();
-    eventBus.on<CheckOutEvent>().listen((event){
+    eventBus.on<CheckOutEvent>().listen((event) {
       _getDefaultAddress();
     });
-
   }
 
   _getDefaultAddress() async {
@@ -57,9 +58,7 @@ class _CheckOutPageState extends State<CheckOutPage> {
       children: [
         Container(
           width: ScreenAdapter.width(160),
-          child: Image.network(
-              "${item['pic']}",
-              fit: BoxFit.cover),
+          child: Image.network("${item['pic']}", fit: BoxFit.cover),
         ),
         Expanded(
             flex: 1,
@@ -100,6 +99,7 @@ class _CheckOutPageState extends State<CheckOutPage> {
   @override
   Widget build(BuildContext context) {
     var checkOutProvider = Provider.of<CheckOut>(context);
+    var cartProvider = Provider.of<Cart>(context);
     return Scaffold(
         appBar: AppBar(
           title: Text("Check out"),
@@ -113,26 +113,21 @@ class _CheckOutPageState extends State<CheckOutPage> {
                     child: Column(
                       children: [
                         SizedBox(height: ScreenAdapter.height(10)),
-                        _addressList.isEmpty?ListTile(
-                          leading: Icon(Icons.add_location),
-                          title: Text("Please add your mailing address."),
-                          trailing: Icon(Icons.navigate_next),
-                          onTap: (){
-                            Navigator.pushNamed(context, '/addressList');
-                          },
-                        ):
                         ListTile(
                           leading: Icon(Icons.add_location),
-                          title: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text("${_addressList[0]['name']} ${_addressList[0]['phone']}"),
-                              SizedBox(height: ScreenAdapter.height(10)),
-                              Text("${_addressList[0]['address']}")
-                            ],
-                          ),
+                          title: _addressList.isEmpty
+                              ? Text("Please add your mailing address.")
+                              : Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                        "${_addressList[0]['name']} ${_addressList[0]['phone']}"),
+                                    SizedBox(height: ScreenAdapter.height(10)),
+                                    Text("${_addressList[0]['address']}")
+                                  ],
+                                ),
                           trailing: Icon(Icons.navigate_next),
-                          onTap: (){
+                          onTap: () {
                             Navigator.pushNamed(context, '/addressList');
                           },
                         ),
@@ -144,12 +139,11 @@ class _CheckOutPageState extends State<CheckOutPage> {
                     color: Colors.white,
                     padding: EdgeInsets.all(ScreenAdapter.width(20)),
                     child: Column(
-                      children: checkOutProvider.checkOutListData.map((value){
+                      children: checkOutProvider.checkOutListData.map((value) {
                         return Column(
                           children: [
                             _checkOutItem(value),
                             Divider(),
-
                           ],
                         );
                       }).toList(),
@@ -181,33 +175,61 @@ class _CheckOutPageState extends State<CheckOutPage> {
                   height: ScreenAdapter.height(100),
                   padding: EdgeInsets.all(ScreenAdapter.height(10)),
                   decoration: BoxDecoration(
-                    color: Colors.white,
-                    border: Border(
-                      top: BorderSide( width: 1, color: Colors.black26),
-
-                    )
-                  ),
+                      color: Colors.white,
+                      border: Border(
+                        top: BorderSide(width: 1, color: Colors.black26),
+                      )),
                   child: Stack(
                     children: [
                       Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(" Sum price: \$140",
-                        style: TextStyle(
-                          color: Colors.red,
-                        )
-                        )
-                      ),
+                          alignment: Alignment.centerLeft,
+                          child: Text(" Sum price: \$140",
+                              style: TextStyle(
+                                color: Colors.red,
+                              ))),
                       Align(
-                        alignment: Alignment.centerRight,
-                        child: ElevatedButton(
-                          child: Text("Check out",
-                            style: TextStyle(color: Colors.white),
-                          ),
-
-                          onPressed: (){},
-
-                        )
-                      )
+                          alignment: Alignment.centerRight,
+                          child: ElevatedButton(
+                            child: Text(
+                              "Check out",
+                              style: TextStyle(color: Colors.white),
+                            ),
+                            onPressed: () async {
+                              List userInfo = await UserServices.getUserInfo();
+                              var allPrice = CheckOutServices.getAllPrice(
+                                      checkOutProvider.checkOutListData)
+                                  .toStringAsFixed(1);
+                              var tempJsonData = {
+                                'uid': userInfo[0]['_id'],
+                                'name': _addressList[0]['name'],
+                                'phone': _addressList[0]['phone'],
+                                'address': _addressList[0]['address'],
+                                'all_price': allPrice,
+                                'products': json
+                                    .encode(checkOutProvider.checkOutListData),
+                                'salt': userInfo[0]['salt'],
+                              };
+                              var sign = SignServices.getSign(tempJsonData);
+                              var api = "${Config.domain}/api/doOrder";
+                              var result = await Dio().post(api, data: {
+                                'uid': userInfo[0]['_id'],
+                                'name': _addressList[0]['name'],
+                                'phone': _addressList[0]['phone'],
+                                'address': _addressList[0]['address'],
+                                'all_price': allPrice,
+                                'products': json
+                                    .encode(checkOutProvider.checkOutListData),
+                                'sign': sign,
+                              });
+                              // print(result);
+                              if (result.data['success']) {
+                                // print(result);
+                                await CheckOutServices.removeUnSelectedCartItem();
+                                cartProvider.updateCartList();
+                                Navigator.pushNamed(context, '/pay');
+                              }
+                            },
+                          ))
                     ],
                   )),
             ),

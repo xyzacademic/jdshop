@@ -12,6 +12,7 @@ import '../pages/checkOut.dart';
 import '../pages/address/addressAdd.dart';
 import '../pages/address/addressList.dart';
 import '../pages/address/addressEdit.dart';
+import '../pages/pay.dart';
 
 final routes = {
   '/': (context, {arguments}) => Tabs(),
@@ -29,6 +30,7 @@ final routes = {
   '/addressAdd': (context)=> AddressAdd(),
   '/addressEdit': (context, {arguments})=> AddressEdit(arguments: arguments),
   '/addressList': (context)=> AddressListPage(),
+  '/pay': (context)=> PayPage(),
 
 };
 
