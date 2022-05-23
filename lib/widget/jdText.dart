@@ -8,8 +8,9 @@ class JDText extends StatelessWidget {
   var onChanged;
   int maxLines;
   double height;
+  TextEditingController? controller;
   JDText({Key? key, this.text = "Enter", this.password = false, this.onChanged=null,
-  this.maxLines=1, this.height=88})
+  this.maxLines=1, this.height=88, this.controller=null})
       : super(key: key);
 
   @override
@@ -28,6 +29,7 @@ class JDText extends StatelessWidget {
       ),
       child: TextField(
         // autofocus: true,
+        controller: controller,
         maxLines: maxLines,
         obscureText: this.password,
         decoration: InputDecoration(

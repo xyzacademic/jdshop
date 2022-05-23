@@ -43,10 +43,11 @@ class _AddressListPageState extends State<AddressListPage> {
   }
 
   @override
-  dispose(){
+  dispose() {
     super.dispose();
     eventBus.fire(CheckOutEvent("Add"));
   }
+
   _changeDefaultAddress(id_) async {
     List userInfo = await UserServices.getUserInfo();
     var tempJsonData = {
@@ -66,6 +67,52 @@ class _AddressListPageState extends State<AddressListPage> {
     }
   }
 
+  _deleteAddress(id_) async {
+    List userInfo = await UserServices.getUserInfo();
+    var tempJsonData = {
+      'uid': userInfo[0]['_id'],
+      'id': id_,
+      'salt': userInfo[0]['salt'],
+    };
+    var sign = SignServices.getSign(tempJsonData);
+    var api = "${Config.domain}/api/deleteAddress";
+    var result = await Dio().post(api, data: {
+      'uid': userInfo[0]['_id'],
+      'id': id_,
+      'sign': sign,
+    });
+    // print(result);
+    if (result.data['success']) {
+      _getAddressList();
+    }
+  }
+
+  _alertDialog(id_) async {
+    var result = await showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text("Important message!!"),
+            content: Text("Do you want to delete?"),
+            actions: [
+              ElevatedButton(
+                  onPressed: () async {
+                    _deleteAddress(id_);
+                    Navigator.pop(context, "Ok");
+                  },
+                  child: Text("Ok")),
+              ElevatedButton(
+                  onPressed: () {
+                    // print("Cancel");
+                    Navigator.pop(context, "Cancel");
+                  },
+                  child: Text("Cancel")),
+            ],
+          );
+        });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -83,22 +130,36 @@ class _AddressListPageState extends State<AddressListPage> {
                             ListTile(
                               leading: Icon(Icons.check, color: Colors.red),
                               title: InkWell(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                          "${_addressList[index]["name"]} ${_addressList[index]["phone"]}"),
-                                      SizedBox(
-                                          height: ScreenAdapter.height(10)),
-                                      Text("${_addressList[index]["address"]}")
-                                    ],
-                                  ),
-                                  onTap: () {
-                                     _changeDefaultAddress(
-                                        _addressList[index]['_id']);
-                                  }),
-                              trailing: Icon(Icons.edit, color: Colors.blue),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                        "${_addressList[index]["name"]} ${_addressList[index]["phone"]}"),
+                                    SizedBox(height: ScreenAdapter.height(10)),
+                                    Text("${_addressList[index]["address"]}")
+                                  ],
+                                ),
+                                onTap: () {
+                                  _changeDefaultAddress(
+                                      _addressList[index]['_id']);
+                                },
+                                onLongPress: () {
+                                  _alertDialog(_addressList[index]['_id']);
+                                },
+                              ),
+                              trailing: IconButton(
+                                onPressed: () {
+                                  Navigator.pushNamed(context, '/addressEdit',
+                                      arguments: {
+                                        'id': _addressList[index]['_id'],
+                                        'name': _addressList[index]['name'],
+                                        'phone': _addressList[index]['phone'],
+                                        'address': _addressList[index]
+                                            ['address'],
+                                      });
+                                },
+                                icon: Icon(Icons.edit, color: Colors.blue),
+                              ),
                             ),
                             Divider(height: ScreenAdapter.height(20)),
                           ],
@@ -109,22 +170,36 @@ class _AddressListPageState extends State<AddressListPage> {
                             ListTile(
                               // leading: Icon(Icons.check, color: Colors.red),
                               title: InkWell(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                          "${_addressList[index]["name"]} ${_addressList[index]["phone"]}"),
-                                      SizedBox(
-                                          height: ScreenAdapter.height(10)),
-                                      Text("${_addressList[index]["address"]}")
-                                    ],
-                                  ),
-                                  onTap: ()  {
-                                     _changeDefaultAddress(
-                                        _addressList[index]['_id']);
-                                  }),
-                              trailing: Icon(Icons.edit, color: Colors.blue),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                        "${_addressList[index]["name"]} ${_addressList[index]["phone"]}"),
+                                    SizedBox(height: ScreenAdapter.height(10)),
+                                    Text("${_addressList[index]["address"]}")
+                                  ],
+                                ),
+                                onTap: () {
+                                  _changeDefaultAddress(
+                                      _addressList[index]['_id']);
+                                },
+                                onLongPress: () {
+                                  _alertDialog(_addressList[index]['_id']);
+                                },
+                              ),
+                              trailing: IconButton(
+                                onPressed: () {
+                                  Navigator.pushNamed(context, '/addressEdit',
+                                      arguments: {
+                                        'id': _addressList[index]['_id'],
+                                        'name': _addressList[index]['name'],
+                                        'phone': _addressList[index]['phone'],
+                                        'address': _addressList[index]
+                                            ['address'],
+                                      });
+                                },
+                                icon: Icon(Icons.edit, color: Colors.blue),
+                              ),
                             ),
                             Divider(height: ScreenAdapter.height(20)),
                           ],

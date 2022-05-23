@@ -27,7 +27,7 @@ final routes = {
   '/registerThird': (context, {arguments}) => RegisterThirdPage(arguments: arguments),
   '/checkOut': (context) => CheckOutPage(),
   '/addressAdd': (context)=> AddressAdd(),
-  '/addressEdit': (context)=> AddressEdit(),
+  '/addressEdit': (context, {arguments})=> AddressEdit(arguments: arguments),
   '/addressList': (context)=> AddressListPage(),
 
 };
