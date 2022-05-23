@@ -195,39 +195,47 @@ class _CheckOutPageState extends State<CheckOutPage> {
                               style: TextStyle(color: Colors.white),
                             ),
                             onPressed: () async {
-                              List userInfo = await UserServices.getUserInfo();
-                              var allPrice = CheckOutServices.getAllPrice(
-                                      checkOutProvider.checkOutListData)
-                                  .toStringAsFixed(1);
-                              var tempJsonData = {
-                                'uid': userInfo[0]['_id'],
-                                'name': _addressList[0]['name'],
-                                'phone': _addressList[0]['phone'],
-                                'address': _addressList[0]['address'],
-                                'all_price': allPrice,
-                                'products': json
-                                    .encode(checkOutProvider.checkOutListData),
-                                'salt': userInfo[0]['salt'],
-                              };
-                              var sign = SignServices.getSign(tempJsonData);
-                              var api = "${Config.domain}/api/doOrder";
-                              var result = await Dio().post(api, data: {
-                                'uid': userInfo[0]['_id'],
-                                'name': _addressList[0]['name'],
-                                'phone': _addressList[0]['phone'],
-                                'address': _addressList[0]['address'],
-                                'all_price': allPrice,
-                                'products': json
-                                    .encode(checkOutProvider.checkOutListData),
-                                'sign': sign,
-                              });
-                              // print(result);
-                              if (result.data['success']) {
+                              if (!_addressList.isEmpty){
+                                List userInfo = await UserServices.getUserInfo();
+                                var allPrice = CheckOutServices.getAllPrice(
+                                    checkOutProvider.checkOutListData)
+                                    .toStringAsFixed(1);
+                                var tempJsonData = {
+                                  'uid': userInfo[0]['_id'],
+                                  'name': _addressList[0]['name'],
+                                  'phone': _addressList[0]['phone'],
+                                  'address': _addressList[0]['address'],
+                                  'all_price': allPrice,
+                                  'products': json
+                                      .encode(checkOutProvider.checkOutListData),
+                                  'salt': userInfo[0]['salt'],
+                                };
+                                var sign = SignServices.getSign(tempJsonData);
+                                var api = "${Config.domain}/api/doOrder";
+                                var result = await Dio().post(api, data: {
+                                  'uid': userInfo[0]['_id'],
+                                  'name': _addressList[0]['name'],
+                                  'phone': _addressList[0]['phone'],
+                                  'address': _addressList[0]['address'],
+                                  'all_price': allPrice,
+                                  'products': json
+                                      .encode(checkOutProvider.checkOutListData),
+                                  'sign': sign,
+                                });
                                 // print(result);
-                                await CheckOutServices.removeUnSelectedCartItem();
-                                cartProvider.updateCartList();
-                                Navigator.pushNamed(context, '/pay');
+                                if (result.data['success']) {
+                                  // print(result);
+                                  await CheckOutServices.removeUnSelectedCartItem();
+                                  cartProvider.updateCartList();
+                                  Navigator.pushNamed(context, '/pay');
+                                }
+                              } else {
+                                Fluttertoast.showToast(
+                                    msg: "Please add a mailing address",
+                                toastLength: Toast.LENGTH_SHORT,
+                                gravity: ToastGravity.CENTER);
                               }
+
                             },
                           ))
                     ],

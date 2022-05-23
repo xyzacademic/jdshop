@@ -230,10 +230,12 @@ class _HomePageState extends State<HomePage>
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+          // backgroundColor: Colors.white,
           leading: IconButton(
             icon:
                 Icon(Icons.center_focus_weak, size: 28, color: Colors.black87),
             onPressed: null,
+
           ),
           title: InkWell(
             child: Container(

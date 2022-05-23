@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:jdshop/pages/tabs/cart.dart';
+import '../pages/OrderInfo.dart';
 import '../pages/tabs/tab.dart';
 import '../pages/search.dart';
 import '../pages/productList.dart';
@@ -13,6 +14,7 @@ import '../pages/address/addressAdd.dart';
 import '../pages/address/addressList.dart';
 import '../pages/address/addressEdit.dart';
 import '../pages/pay.dart';
+import '../pages/order.dart';
 
 final routes = {
   '/': (context, {arguments}) => Tabs(),
@@ -31,6 +33,9 @@ final routes = {
   '/addressEdit': (context, {arguments})=> AddressEdit(arguments: arguments),
   '/addressList': (context)=> AddressListPage(),
   '/pay': (context)=> PayPage(),
+  '/order': (context)=> OrderPage(),
+  '/orderInfo': (context)=> OrderInfoPage(),
+
 
 };
 

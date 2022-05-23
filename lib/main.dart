@@ -62,14 +62,14 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
             // title: 'First Method',
             // You can use the library anywhere in the app even in theme
 
-            initialRoute: '/pay',
+            initialRoute: '/order',
             onGenerateRoute: onGenerateRoute,
             theme: ThemeData(
               // colorScheme: ColorScheme.light()
-              // primarySwatch: Colors.grey,
+              // primarySwatch: Container(),
               // brightness: Brightness.light,
 
-              // primaryColor: Colors.black54,
+              primaryColor: Colors.white,
               // backgroundColor: Colors.white,
             )));
       },

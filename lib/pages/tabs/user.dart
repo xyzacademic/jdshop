@@ -112,7 +112,11 @@ class _UserPageState extends State<UserPage>
             ),
             ListTile(
                 leading: Icon(Icons.home, color: Colors.red),
-                title: Text("Orders")),
+                title: Text("Orders"),
+              onTap: (){
+                  Navigator.pushNamed(context, '/order');
+              },
+            ),
             Divider(),
             ListTile(
                 leading: Icon(Icons.payment, color: Colors.green),
