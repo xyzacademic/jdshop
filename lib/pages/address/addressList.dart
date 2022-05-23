@@ -37,9 +37,33 @@ class _AddressListPageState extends State<AddressListPage> {
   void initState() {
     super.initState();
     _getAddressList();
-    eventBus.on<AddressEvent>().listen((event){
+    eventBus.on<AddressEvent>().listen((event) {
       _getAddressList();
     });
+  }
+
+  @override
+  dispose(){
+    super.dispose();
+    eventBus.fire(CheckOutEvent("Add"));
+  }
+  _changeDefaultAddress(id_) async {
+    List userInfo = await UserServices.getUserInfo();
+    var tempJsonData = {
+      'uid': userInfo[0]['_id'],
+      'id': id_,
+      'salt': userInfo[0]['salt'],
+    };
+    var sign = SignServices.getSign(tempJsonData);
+    var api = "${Config.domain}/api/changeDefaultAddress";
+    var result = await Dio().post(api, data: {
+      'uid': userInfo[0]['_id'],
+      'id': id_,
+      'sign': sign,
+    });
+    if (result.data['success']) {
+      Navigator.pop(context);
+    }
   }
 
   @override
@@ -58,15 +82,22 @@ class _AddressListPageState extends State<AddressListPage> {
                             SizedBox(height: ScreenAdapter.height(20)),
                             ListTile(
                               leading: Icon(Icons.check, color: Colors.red),
-                              title: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                      "${_addressList[index]["name"]} ${_addressList[index]["phone"]}"),
-                                  SizedBox(height: ScreenAdapter.height(10)),
-                                  Text("${_addressList[index]["address"]}")
-                                ],
-                              ),
+                              title: InkWell(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                          "${_addressList[index]["name"]} ${_addressList[index]["phone"]}"),
+                                      SizedBox(
+                                          height: ScreenAdapter.height(10)),
+                                      Text("${_addressList[index]["address"]}")
+                                    ],
+                                  ),
+                                  onTap: () {
+                                     _changeDefaultAddress(
+                                        _addressList[index]['_id']);
+                                  }),
                               trailing: Icon(Icons.edit, color: Colors.blue),
                             ),
                             Divider(height: ScreenAdapter.height(20)),
@@ -77,15 +108,22 @@ class _AddressListPageState extends State<AddressListPage> {
                             SizedBox(height: ScreenAdapter.height(20)),
                             ListTile(
                               // leading: Icon(Icons.check, color: Colors.red),
-                              title: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                      "${_addressList[index]["name"]} ${_addressList[index]["phone"]}"),
-                                  SizedBox(height: ScreenAdapter.height(10)),
-                                  Text("${_addressList[index]["address"]}")
-                                ],
-                              ),
+                              title: InkWell(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                          "${_addressList[index]["name"]} ${_addressList[index]["phone"]}"),
+                                      SizedBox(
+                                          height: ScreenAdapter.height(10)),
+                                      Text("${_addressList[index]["address"]}")
+                                    ],
+                                  ),
+                                  onTap: ()  {
+                                     _changeDefaultAddress(
+                                        _addressList[index]['_id']);
+                                  }),
                               trailing: Icon(Icons.edit, color: Colors.blue),
                             ),
                             Divider(height: ScreenAdapter.height(20)),

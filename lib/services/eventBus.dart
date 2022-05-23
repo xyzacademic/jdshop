@@ -31,3 +31,10 @@ class AddressEvent{
 }
 
 
+class CheckOutEvent{
+  String _str="";
+  String get str=>_str;
+  CheckOutEvent(String str){
+    _str = str;
+  }
+}

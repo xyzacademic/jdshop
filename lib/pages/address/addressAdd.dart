@@ -22,9 +22,11 @@ class _AddressAddState extends State<AddressAdd> {
   String _phone = '';
   String _address = '';
 
+  @override
   dispose(){
     super.dispose();
-    eventBus.fire(AddressEvent("Adding address successfully"));
+    eventBus.fire(CheckOutEvent("Add"));
+    eventBus.fire(AddressEvent("Add"));
   }
   @override
   Widget build(BuildContext context) {

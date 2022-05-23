@@ -6,6 +6,8 @@ import 'package:jdshop/services/screenAdapter.dart';
 import 'package:provider/provider.dart';
 import '../config/config.dart';
 import '../provider/checkOut.dart';
+import '../services/signServices.dart';
+import '../services/userServices.dart';
 import '../widget/jdText.dart';
 import '../widget/jdButton.dart';
 import 'package:dio/dio.dart';
@@ -20,6 +22,36 @@ class CheckOutPage extends StatefulWidget {
 }
 
 class _CheckOutPageState extends State<CheckOutPage> {
+
+  List _addressList = [];
+  @override
+  void initState(){
+    super.initState();
+
+    _getDefaultAddress();
+    eventBus.on<CheckOutEvent>().listen((event){
+      _getDefaultAddress();
+    });
+
+  }
+
+  _getDefaultAddress() async {
+    List userInfo = await UserServices.getUserInfo();
+    var tempJson = {
+      'uid': userInfo[0]['_id'],
+      'salt': userInfo[0]['salt'],
+    };
+    var sign = SignServices.getSign(tempJson);
+    var api =
+        '${Config.domain}/api/oneAddressList?uid=${userInfo[0]['_id']}&sign=${sign}';
+    var result = await Dio().get(api);
+    // print(result);
+    if (!mounted) return;
+    setState(() {
+      _addressList = result.data['result'];
+    });
+  }
+
   Widget _checkOutItem(item) {
     return Row(
       children: [
@@ -81,25 +113,28 @@ class _CheckOutPageState extends State<CheckOutPage> {
                     child: Column(
                       children: [
                         SizedBox(height: ScreenAdapter.height(10)),
-                        ListTile(
+                        _addressList.isEmpty?ListTile(
                           leading: Icon(Icons.add_location),
                           title: Text("Please add your mailing address."),
                           trailing: Icon(Icons.navigate_next),
                           onTap: (){
                             Navigator.pushNamed(context, '/addressList');
                           },
-                        ),
+                        ):
                         ListTile(
                           leading: Icon(Icons.add_location),
                           title: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text("zhang san 15209090909"),
+                              Text("${_addressList[0]['name']} ${_addressList[0]['phone']}"),
                               SizedBox(height: ScreenAdapter.height(10)),
-                              Text("403 N 2nd ST")
+                              Text("${_addressList[0]['address']}")
                             ],
                           ),
                           trailing: Icon(Icons.navigate_next),
+                          onTap: (){
+                            Navigator.pushNamed(context, '/addressList');
+                          },
                         ),
                         SizedBox(height: ScreenAdapter.height(10)),
                       ],
